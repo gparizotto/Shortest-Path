@@ -1,0 +1,40 @@
+body{
+    margin: 0;
+    padding:0;
+}
+
+.container{
+    background-color: aliceblue;
+    height:100vh;
+    width:100vw;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#calculate{
+    position: absolute;
+    top:5px;
+    left:auto;
+}
+/* quadradinho 20x20 */
+/* 20 linhas por 50 colunas */
+.canva{
+    background-color:black;
+    height: 400px;
+    width: 1000px;
+    position: relative;
+}
+
+.square{
+    position: absolute;
+    background-color: white;
+    height:20px;
+    width:20px;
+    border-radius: 3px;
+    box-shadow: inset -1px 0 0 black, inset 0 -1px 0 black, inset 1px 0 0 black, inset 0 1px 0 black;
+}
+
+.square.selected{
+    background-color: rgb(0, 255, 0) !important;
+}

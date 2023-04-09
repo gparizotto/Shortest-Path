@@ -149,6 +149,7 @@ body {
   border-radius: 3px;
   box-shadow: inset -1px 0 0 black, inset 0 -1px 0 black, inset 1px 0 0 black,
     inset 0 1px 0 black;
+  animation-fill-mode: forwards;
 }
 
 .square:hover {
@@ -165,24 +166,45 @@ body {
 
 @keyframes pathFound {
   0% {
-    background-color: white;
+    background-color: rgb(9, 255, 234);
     transform: translateY(0);
   }
   50% {
     background-color: yellow;
-    transform: translateY(-2px);
-    transform: translateX(-2px);
+    transform: translateY(-4px);
+    transform: translateX(-4px);
   }
   100% {
     background-color: yellow;
     transform: translateY(0);
-    transform: translateX(0);
   }
 }
 
 .square.path {
-  animation-name: pathFound;
-  animation-duration: 2s;
+  background-color: rgb(9, 255, 234);
+  animation-name: pathFound !important;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes cellVisited {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    background-color: rgb(9, 87, 255);
+    transform: translateY(-4px);
+    transform: translateX(-4px);
+  }
+  100% {
+    background-color: rgb(9, 255, 234);
+    transform: translateY(0);
+  }
+}
+
+.square.visited {
+  animation-name: cellVisited;
+  animation-duration: 1s;
   animation-fill-mode: forwards;
 }
 

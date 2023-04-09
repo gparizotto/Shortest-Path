@@ -1,5 +1,3 @@
-
-
 // Define a matriz
 const ROWS = 20;
 const COLS = 50;
@@ -29,11 +27,17 @@ class PriorityQueue {
   }
 }
 
+export let delay = 0;
+
 // Define a função dijkstra para encontrar o caminho mínimo
 export function dijkstra(start, end, matrix) {
   // Define a matriz de distâncias e de visitados
-  const distances = new Array(ROWS).fill().map(() => new Array(COLS).fill(Infinity));
+  const distances = new Array(ROWS)
+    .fill()
+    .map(() => new Array(COLS).fill(Infinity));
   const visited = new Array(ROWS).fill().map(() => new Array(COLS).fill(false));
+
+  delay = 0;
 
   // Define a fila de prioridade e adiciona o ponto de partida com distância zero
   const queue = new PriorityQueue();
@@ -86,6 +90,12 @@ export function dijkstra(start, end, matrix) {
         distances[neighbor[0]][neighbor[1]] = distance;
         predecessors[neighbor] = current;
         queue.enqueue(neighbor, distance);
+
+        const div = document.getElementById('div-' + neighbor[0] + '-' + neighbor[1]);
+        div.style.animationDelay = `${delay}s`;
+        div.classList.add('visited');
+        delay += 0.002;
+        matrix[current[0]][current[1]] = 3;
       }
     }
   }
@@ -106,6 +116,14 @@ function getNeighbors(cell, matrix) {
     neighbors.push([row - 1, col]);
   }
 
+  // if (row > 0 && col > 0 && matrix[row - 1][col - 1]) {
+  //   neighbors.push([row - 1, col - 1]);
+  // }
+
+  // if (row < ROWS - 1 && col > 0 && matrix[row + 1][col - 1]) {
+  //   neighbors.push([row + 1, col - 1]);
+  // }
+
   if (col > 0 && matrix[row][col - 1]) {
     neighbors.push([row, col - 1]);
   }
@@ -117,6 +135,13 @@ function getNeighbors(cell, matrix) {
   if (col < COLS - 1 && matrix[row][col + 1]) {
     neighbors.push([row, col + 1]);
   }
+
+  // if (row < ROWS - 1 && col < COLS - 1 && matrix[row + 1][col + 1]) {
+  //   neighbors.push([row + 1, col + 1]);
+  // }
+  // if (row > 0 && col < COLS - 1 && matrix[row - 1][col + 1]) {
+  //   neighbors.push([row - 1, col + 1]);
+  // }
 
   return neighbors;
 }
@@ -136,6 +161,3 @@ function getNeighbors(cell, matrix) {
 // } else {
 //   console.log('Não há caminho possível.');
 // }
-
-
-

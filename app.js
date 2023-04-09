@@ -1,4 +1,4 @@
-import { dijkstra } from "./shortest.js";
+import { dijkstra, delay } from "./shortest.js";
 
 const area = document.getElementById("area");
 const linhas = 20;
@@ -91,15 +91,19 @@ calculatebtn.addEventListener("click", () => {
   if (result) {
     console.log(`Distância mínima: ${result.distance}`);
 
-    let delay = 0;
-    for (let i = 1; i < result.path.length; i++) {
-      const [row, col] = result.path[i];
-      const div = document.getElementById("div-" + row + "-" + col);
-      div.style.animationDelay = `${delay}s`;
-      div.classList.add("path");
-      delay += 0.05;
-      cells[row][col] = "X";
-    }
+    let time = 0;
+
+    setTimeout(() => {
+      for (let i = 1; i < result.path.length; i++) {
+        const [row, col] = result.path[i];
+        const div = document.getElementById("div-" + row + "-" + col);
+        cells[row][col] = 2;
+        div.style.animationDelay = `${time}s`;
+        div.classList.add("path");
+        div.classList.remove("visited");
+        time += 0.03;
+      }
+    }, delay * 1300);
   } else console.log("Não foi possível encontrar uma solução");
 });
 
@@ -110,6 +114,7 @@ function reset() {
       div = document.getElementById("div-" + i + "-" + j);
       div.classList.remove("wall");
       div.classList.remove("path");
+      div.classList.remove("visited");
       cells[i][j] = 1;
     }
   console.log(cells);

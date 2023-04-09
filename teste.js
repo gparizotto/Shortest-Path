@@ -1,4 +1,4 @@
-import { dijkstra } from "./shortest.js";
+
 
 const area = document.getElementById("area");
 const linhas = 20;
@@ -11,12 +11,12 @@ let wallSelected = false;
 let cells = new Array();
 let cell, row, column;
 
-export let selectedCells = new Array();
+let selectedCells = new Array();
 
 for (let i = 0; i < linhas; i++) {
   cells[i] = new Array(colunas);
   for (let j = 0; j < colunas; j++) {
-    cells[i][j] = 1; // Define um valor padrão para cada elemento
+    cells[i][j] = "none"; // Define um valor padrão para cada elemento
     let div = document.createElement("div"); //creates a div
     div.setAttribute("id", "div-" + i + "-" + j);
     div.classList.add("square"); //makes it a square
@@ -48,7 +48,7 @@ area.addEventListener("click", function (event) {
         cell.classList.remove("wall");
       }
       cell.classList.add("selected");
-      //cells[linha][coluna] = "selected";
+      cells[linha][coluna] = "selected";
       selectedCells.push({ i: linha, j: coluna });
     }
   } else {
@@ -60,10 +60,11 @@ area.addEventListener("click", function (event) {
       cell.classList.remove("selected");
     }
     cell.classList.add("wall");
-    cells[linha][coluna] = 0;
+    cells[linha][coluna] = "wall";
     if (!mouseCheck) mouseCheck = true;
     else mouseCheck = false;
   }
+  console.log(selectedCells);
 });
 
 area.addEventListener("mousemove", function (event) {
@@ -71,7 +72,7 @@ area.addEventListener("mousemove", function (event) {
   let [linha, coluna] = get_index(cell.id);
   if (mouseCheck) {
     cell.classList.add("wall");
-    cells[linha][coluna] = 0;
+    cells[linha][coluna] = "wall";
   }
 });
 
@@ -80,24 +81,3 @@ wallBtn.addEventListener("click", () => {
   if (wallBtn.classList.contains("pressed")) wallSelected = true;
   else wallSelected = false;
 });
-
-const calculatebtn = document.getElementById("calculate");
-calculatebtn.addEventListener("click", () => {
-  const result = dijkstra(
-    [selectedCells[0].i, selectedCells[0].j],
-    [selectedCells[1].i, selectedCells[1].j],
-    cells
-  );
-  if (result) {
-    console.log(`Distância mínima: ${result.distance}`);
-
-    for (let i = 1; i < result.path.length; i++) {
-      const [row, col] = result.path[i];
-      const div = document.getElementById('div-' + row + '-' + col);
-      div.classList.add('path');
-      cells[row][col] = "X";
-    }
-  }
-  else console.log('Não foi possível encontrar uma solução');
-});
-

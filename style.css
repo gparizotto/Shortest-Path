@@ -1,40 +1,125 @@
-body{
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
+
+* {
     margin: 0;
-    padding:0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+    margin: none;
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+    padding: 0;
 }
 
-.container{
-    background-color: aliceblue;
-    height:100vh;
-    width:100vw;
-    display:flex;
-    justify-content: center;
+/* .hero {
+    height: 10vh;
+    width: 100%;
+    background-color: rgb(0, 255, 0);
+}
+
+.logo {
+    color: white;
+    font-size: 28px;
+}
+
+span {
+    color: rgb(2, 70, 2);
+}
+
+nav {
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    padding-top: 20px;
+    padding-left: 10%;
+    padding-right: 10%;
 }
 
-#calculate{
-    position: absolute;
-    top:5px;
-    left:auto;
+nav ul li {
+    list-style-type: none;
+    display: inline-block;
+    padding: 10px 20px;
+} */
+
+ body {
+  margin: 0;
+  padding: 0;
+} 
+
+.container {
+  background-color: aliceblue;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+#calculate {
+  position: absolute;
+  top: 5px;
+  left: auto;
+}
+
+#calculate:active {
+  background-color: rgb(0, 255, 0);
+} */
+
+/* .wall {
+    position: absolute;
+    top: 30px;
+    left: auto;
+} */
+
+#wall-btn {
+  position: absolute;
+  top: 30px;
+  left: auto;
+}
+
+#wall-btn.pressed {
+  background-color: rgb(0, 255, 0);
+}
+
 /* quadradinho 20x20 */
 /* 20 linhas por 50 colunas */
-.canva{
-    background-color:black;
-    height: 400px;
-    width: 1000px;
-    position: relative;
+.canva {
+  background-color: aliceblue;
+  height: 400px;
+  width: 1000px;
+  position: relative;
 }
 
-.square{
-    position: absolute;
-    background-color: white;
-    height:20px;
-    width:20px;
-    border-radius: 3px;
-    box-shadow: inset -1px 0 0 black, inset 0 -1px 0 black, inset 1px 0 0 black, inset 0 1px 0 black;
+.square {
+  position: absolute;
+  background-color: white;
+  height: 20px;
+  width: 20px;
+  border-radius: 3px;
+  box-shadow: inset -1px 0 0 black, inset 0 -1px 0 black, inset 1px 0 0 black,
+    inset 0 1px 0 black;
 }
 
-.square.selected{
-    background-color: rgb(0, 255, 0) !important;
+.square:hover {
+  background-color: rgb(117, 113, 113);
+}
+
+.square.selected {
+  background-color: rgb(0, 255, 0) !important;
+}
+
+.square.wall {
+  background-color: rgb(37, 31, 31) !important;
+}
+
+.square.path {
+  background-color: yellow !important;
+}
+
+.wall.wallSelected {
+  background-color: red !important;
+  color: white !important;
 }

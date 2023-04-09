@@ -8,18 +8,22 @@
     <title>Document</title>
   </head>
   <body>
-    <!-- <div class="hero">
+    <header>
       <nav>
-        <h2 class="logo">PathFinding <span>Visualizer</span></h2>
-        <ul>
-          <li><a href="#">Dijkstra</a></li>
+        <a class="logo">PathFinding Visualizer</a>
+        <ul class="nav-list">
+          <li><a>dijkstra</a></li>
         </ul>
-        <button type="button">Calculate</button>
+        <div>
+          <button id="reset-btn">RESET</button>
+          <button id="wall-btn">WALL</button>
+          <button id="calculate-btn"><a>CALCULATE</a></button>
+        </div>
       </nav>
-    </div> -->
+    </header>
     <div class="container">
-      <button id="calculate">Calculate</button>
-      <button id="wall-btn" class="wall">Wall</button>
+      <!-- <button id="calculate">Calculate</button>
+      <button id="wall-btn" class="wall">Wall</button> -->
       <div class="canva" id="area"></div>
     </div>
     <script src="app.js" type="module"></script>

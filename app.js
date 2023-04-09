@@ -81,7 +81,7 @@ wallBtn.addEventListener("click", () => {
   else wallSelected = false;
 });
 
-const calculatebtn = document.getElementById("calculate");
+const calculatebtn = document.getElementById("calculate-btn");
 calculatebtn.addEventListener("click", () => {
   const result = dijkstra(
     [selectedCells[0].i, selectedCells[0].j],
@@ -91,13 +91,29 @@ calculatebtn.addEventListener("click", () => {
   if (result) {
     console.log(`Distância mínima: ${result.distance}`);
 
+    let delay = 0;
     for (let i = 1; i < result.path.length; i++) {
       const [row, col] = result.path[i];
-      const div = document.getElementById('div-' + row + '-' + col);
-      div.classList.add('path');
+      const div = document.getElementById("div-" + row + "-" + col);
+      div.style.animationDelay = `${delay}s`;
+      div.classList.add("path");
+      delay += 0.05;
       cells[row][col] = "X";
     }
-  }
-  else console.log('Não foi possível encontrar uma solução');
+  } else console.log("Não foi possível encontrar uma solução");
 });
 
+function reset() {
+  let div;
+  for (let i = 0; i < linhas; i++)
+    for (let j = 0; j < colunas; j++) {
+      div = document.getElementById("div-" + i + "-" + j);
+      div.classList.remove("wall");
+      div.classList.remove("path");
+      cells[i][j] = 1;
+    }
+  console.log(cells);
+}
+
+const resetbtn = document.getElementById("reset-btn");
+resetbtn.addEventListener("click", reset);

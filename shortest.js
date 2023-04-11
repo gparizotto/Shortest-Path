@@ -1,3 +1,5 @@
+let [linhas, colunas] = document.getElementById('size-btn').innerHTML.split('x');
+console.log(linhas, colunas);
 // Define a matriz
 const ROWS = 20;
 const COLS = 50;
@@ -6,6 +8,8 @@ const matrix = new Array(ROWS).fill().map(() => new Array(COLS).fill(1));
 // Define o ponto de partida e o ponto de destino
 const start = [5, 5];
 const end = [19, 5];
+
+let delayTime = 0.01;
 
 // Define a classe PriorityQueue para a fila de prioridade
 class PriorityQueue {
@@ -94,7 +98,7 @@ export function dijkstra(start, end, matrix) {
         const div = document.getElementById('div-' + neighbor[0] + '-' + neighbor[1]);
         div.style.animationDelay = `${delay}s`;
         div.classList.add('visited');
-        delay += 0.002;
+        delay += delayTime;
         matrix[current[0]][current[1]] = 3;
       }
     }
@@ -161,3 +165,21 @@ function getNeighbors(cell, matrix) {
 // } else {
 //   console.log('Não há caminho possível.');
 // }
+
+const speedBtn = document.getElementById('speed-btn');
+speedBtn.addEventListener('click', () =>{
+  let speed = speedBtn.innerHTML;
+  if(speed == 'Slow') {
+    speedBtn.innerHTML = 'Normal';
+    delayTime = 0.01;
+  }
+  else if(speed == 'Normal') {
+    speedBtn.innerHTML = 'Fast';
+    delayTime = 0.003;
+  }
+  else if(speed == 'Fast'){
+    speedBtn.innerHTML = 'Slow';
+    delayTime = 0.05;
+  }
+  console.log(delayTime);
+})

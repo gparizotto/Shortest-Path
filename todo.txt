@@ -1,0 +1,10 @@
+-mudar canva para quadrado
+-mostrar que nao tem solucao
+-adicionar mais algoritmos
+-arrastar pontos de comeco e fim
+-labirinto
+-3 tamanhos de tabuleiro
+-velocidade
+-buga quando muda o tamanho
+-nao funciona o algoritmo quando o tamanho muda
+-reescrever codigo

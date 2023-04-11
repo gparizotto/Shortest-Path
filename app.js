@@ -1,9 +1,12 @@
 import { dijkstra, delay } from "./shortest.js";
 
 const area = document.getElementById("area");
-const linhas = 20;
-const colunas = 50;
-const square_size = 20;
+let linhas = 20;
+let colunas = 50;
+let square_size = 20;
+const canva_width = 1000;
+const canva_height = 400;
+const canva_area = canva_width * canva_height;
 
 const wallBtn = document.getElementById("wall-btn");
 let wallSelected = false;
@@ -13,18 +16,33 @@ let cell, row, column;
 
 export let selectedCells = new Array();
 
-for (let i = 0; i < linhas; i++) {
-  cells[i] = new Array(colunas);
-  for (let j = 0; j < colunas; j++) {
-    cells[i][j] = 1; // Define um valor padrão para cada elemento
-    let div = document.createElement("div"); //creates a div
-    div.setAttribute("id", "div-" + i + "-" + j);
-    div.classList.add("square"); //makes it a square
-    div.style.top = i * 20 + "px"; //sets the position
-    div.style.left = j * 20 + "px";
-    area.appendChild(div);
+function delete_board() {
+  for (let i = 0; i < linhas; i++) {
+    for (let j = 0; j < colunas; j++) {
+      let div = document.getElementById("div-" + i + "-" + j);
+      div.remove();
+    }
   }
 }
+
+function generate_board() {
+  for (let i = 0; i < linhas; i++) {
+    cells[i] = new Array(colunas);
+    for (let j = 0; j < colunas; j++) {
+      cells[i][j] = 1; // Define um valor padrão para cada elemento
+      let div = document.createElement("div"); //creates a div
+      div.setAttribute("id", "div-" + i + "-" + j);
+      div.classList.add("square"); //makes it a square
+      div.style.height = square_size + 'px';
+      div.style.width = square_size + 'px';
+      div.style.top = i * square_size + "px"; //sets the position
+      div.style.left = j * square_size + "px";
+      area.appendChild(div);
+    }
+  }
+}
+
+generate_board();
 
 let mouseCheck = false;
 
@@ -103,7 +121,7 @@ calculatebtn.addEventListener("click", () => {
         div.classList.remove("visited");
         time += 0.03;
       }
-    }, delay * 1300);
+    }, delay * 1000);
   } else console.log("Não foi possível encontrar uma solução");
 });
 
@@ -119,6 +137,36 @@ function reset() {
     }
   console.log(cells);
 }
+
+const sizeBtn = document.getElementById("size-btn");
+sizeBtn.addEventListener("click", () => {
+  let size = sizeBtn.innerHTML;
+  delete_board();
+  if (size == "20x50") {
+    sizeBtn.innerHTML = "10x25";
+    linhas = 10;
+    colunas = 25;
+    square_size = 40;
+  } else if (size == "40x100") {
+    sizeBtn.innerHTML = "20x50";
+    linhas = 20;
+    colunas = 50;
+    square_size = 20;
+  } else if (size == "10x25") {
+    sizeBtn.innerHTML = "40x100";
+    linhas = 40;
+    colunas = 100;
+    square_size = 10;
+  }
+  
+  generate_board();
+  console.log(cells);
+});
+
+function teste() {
+}
+
+teste();
 
 const resetbtn = document.getElementById("reset-btn");
 resetbtn.addEventListener("click", reset);

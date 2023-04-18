@@ -1,172 +1,271 @@
-import { dijkstra, delay } from "./shortest.js";
+import { Dijkstra } from "./shortest.js";
 
-const area = document.getElementById("area");
-let linhas = 20;
-let colunas = 50;
-let square_size = 20;
-const canva_width = 1000;
-const canva_height = 400;
-const canva_area = canva_width * canva_height;
+const WIDTH = 1000;
+const HEIGHT = 400;
 
-const wallBtn = document.getElementById("wall-btn");
-let wallSelected = false;
+class Cell {
+  constructor(linha, coluna, square_size, area) {
+    this.linha = linha;
+    this.coluna = coluna;
+    this.square_size = square_size;
+    this.area = area;
+    this.div = document.createElement("div");
+    this.div.setAttribute("id", `div-${linha}-${coluna}`);
+    this.div.classList.add("square");
+    this.div.style.height = `${square_size}px`;
+    this.div.style.width = `${square_size}px`;
+    this.div.style.top = `${linha * square_size}px`;
+    this.div.style.left = `${coluna * square_size}px`;
+    this.area.appendChild(this.div);
+    this.type = "available";
+  }
 
-let cells = new Array();
-let cell, row, column;
-
-export let selectedCells = new Array();
-
-function delete_board() {
-  for (let i = 0; i < linhas; i++) {
-    for (let j = 0; j < colunas; j++) {
-      let div = document.getElementById("div-" + i + "-" + j);
-      div.remove();
+  setType(type) {
+    this.type = type;
+    if (type === "wall") {
+      this.div.classList.add("wall");
+      this.div.classList.remove("selected");
+    } else if (type === "available") {
+      this.div.classList.remove("wall", "selected", "visited", "path");
+    } else if (type === "selected") {
+      this.div.classList.add("selected");
+      this.div.classList.remove("wall", "visited", "path");
+    } else if (type === "visited") {
+      this.div.classList.add("visited");
+      this.div.classList.remove("wall", "selected", "path");
+    } else if (type === "path") {
+      this.div.classList.add("path");
+      this.div.classList.remove("wall", "visited", "selected");
     }
+  }
+
+  isWall() {
+    return this.type === "wall";
+  }
+
+  isAvailable() {
+    return this.type === "available";
+  }
+
+  isSelected() {
+    return this.type === "selected";
+  }
+
+  isVisited() {
+    return this.type === "visited";
+  }
+
+  isPath() {
+    return this.type === "path";
   }
 }
 
-function generate_board() {
-  for (let i = 0; i < linhas; i++) {
-    cells[i] = new Array(colunas);
-    for (let j = 0; j < colunas; j++) {
-      cells[i][j] = 1; // Define um valor padrão para cada elemento
-      let div = document.createElement("div"); //creates a div
-      div.setAttribute("id", "div-" + i + "-" + j);
-      div.classList.add("square"); //makes it a square
-      div.style.height = square_size + 'px';
-      div.style.width = square_size + 'px';
-      div.style.top = i * square_size + "px"; //sets the position
-      div.style.left = j * square_size + "px";
-      area.appendChild(div);
-    }
+class Board {
+  constructor(rows, columns, square_size, area) {
+    this.rows = rows;
+    this.columns = columns;
+
+    this.square_size = square_size;
+    this.area = area;
+    this.cells = new Array(this.rows);
+    this.selectedCells = [];
+    this.wallSelected = false;
+    this.mouseCheck = false;
   }
-}
 
-generate_board();
+  getIndex(id) {
+    const [_, row, column] = id.split("-");
+    return [parseInt(row), parseInt(column)];
+  }
 
-let mouseCheck = false;
+  isWallSelected() {
+    return this.wallSelected;
+  }
 
-function get_index(id) {
-  const [_, linha, coluna] = id.split("-");
-  return [parseInt(linha), parseInt(coluna)];
-}
+  removeCellSelected(cell, row, column) {
+    const removedCell = this.selectedCells.findIndex(
+      (selected) => selected[0] == row && selected[1] == column
+    );
+    this.selectedCells.splice(removedCell, 1);
+    cell.setType("available");
+  }
 
-area.addEventListener("click", function (event) {
-  cell = event.target;
-  let [linha, coluna] = get_index(cell.id);
-  if (!wallSelected) {
-    if (cell.classList.contains("selected")) {
-      const removed = selectedCells.findIndex(
-        (selected) => selected.i == linha && selected.j == coluna
-      );
-      selectedCells.splice(removed, 1);
-      cell.classList.remove("selected");
-    } else if (selectedCells.length < 2) {
-      if (cell.classList.contains("wall")) {
-        cell.classList.remove("wall");
+  selectCell(cell, row, column) {
+    cell.setType("selected");
+    this.selectedCells.push([row, column]);
+  }
+
+  addWall(cell, row, column) {
+    if (cell.isSelected()) this.removeCellSelected(cell, row, column);
+    cell.setType("wall");
+  }
+
+  deleteBoard() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.cells[i][j].div.remove();
       }
-      cell.classList.add("selected");
-      //cells[linha][coluna] = "selected";
-      selectedCells.push({ i: linha, j: coluna });
     }
-  } else {
-    if (cell.classList.contains("selected")) {
-      const removed = selectedCells.findIndex(
-        (selected) => selected.i == linha && selected.j == coluna
-      );
-      selectedCells.splice(removed, 1);
-      cell.classList.remove("selected");
-    }
-    cell.classList.add("wall");
-    cells[linha][coluna] = 0;
-    if (!mouseCheck) mouseCheck = true;
-    else mouseCheck = false;
+    this.selectedCells = [];
+    this.cells = [];
   }
-});
 
-area.addEventListener("mousemove", function (event) {
-  cell = event.target;
-  let [linha, coluna] = get_index(cell.id);
-  if (mouseCheck) {
-    cell.classList.add("wall");
-    cells[linha][coluna] = 0;
-  }
-});
-
-wallBtn.addEventListener("click", () => {
-  wallBtn.classList.toggle("pressed");
-  if (wallBtn.classList.contains("pressed")) wallSelected = true;
-  else wallSelected = false;
-});
-
-const calculatebtn = document.getElementById("calculate-btn");
-calculatebtn.addEventListener("click", () => {
-  const result = dijkstra(
-    [selectedCells[0].i, selectedCells[0].j],
-    [selectedCells[1].i, selectedCells[1].j],
-    cells
-  );
-  if (result) {
-    console.log(`Distância mínima: ${result.distance}`);
-
-    let time = 0;
-
-    setTimeout(() => {
-      for (let i = 1; i < result.path.length; i++) {
-        const [row, col] = result.path[i];
-        const div = document.getElementById("div-" + row + "-" + col);
-        cells[row][col] = 2;
-        div.style.animationDelay = `${time}s`;
-        div.classList.add("path");
-        div.classList.remove("visited");
-        time += 0.03;
+  createBoard() {
+    for (let i = 0; i < this.rows; i++) {
+      this.cells[i] = new Array(this.columns);
+      for (let j = 0; j < this.columns; j++) {
+        this.cells[i][j] = new Cell(i, j, this.square_size, this.area);
       }
-    }, delay * 1000);
-  } else console.log("Não foi possível encontrar uma solução");
-});
-
-function reset() {
-  let div;
-  for (let i = 0; i < linhas; i++)
-    for (let j = 0; j < colunas; j++) {
-      div = document.getElementById("div-" + i + "-" + j);
-      div.classList.remove("wall");
-      div.classList.remove("path");
-      div.classList.remove("visited");
-      cells[i][j] = 1;
     }
-  console.log(cells);
-}
-
-const sizeBtn = document.getElementById("size-btn");
-sizeBtn.addEventListener("click", () => {
-  let size = sizeBtn.innerHTML;
-  delete_board();
-  if (size == "20x50") {
-    sizeBtn.innerHTML = "10x25";
-    linhas = 10;
-    colunas = 25;
-    square_size = 40;
-  } else if (size == "40x100") {
-    sizeBtn.innerHTML = "20x50";
-    linhas = 20;
-    colunas = 50;
-    square_size = 20;
-  } else if (size == "10x25") {
-    sizeBtn.innerHTML = "40x100";
-    linhas = 40;
-    colunas = 100;
-    square_size = 10;
   }
-  
-  generate_board();
-  console.log(cells);
-});
-
-function teste() {
 }
 
-teste();
+class Area {
+  constructor() {
+    this.board = new Board(20, 50, 20, document.getElementById("area"));
 
-const resetbtn = document.getElementById("reset-btn");
-resetbtn.addEventListener("click", reset);
+    this.wallBtn = document.getElementById("wall-btn");
+    this.resetBtn = document.getElementById("reset-btn");
+    this.calculateBtn = document.getElementById("calculate-btn");
+    this.sizeBtn = document.getElementById("size-btn");
+    this.speedBtn = document.getElementById("speed-btn");
+    this.mazeBtn = document.getElementById("maze-btn");
+    this.delayTime = 0.01;
+
+    this.dijkstraIsActive = false;
+  }
+
+  handleBoardClick() {
+    this.board.area.addEventListener(
+      "click",
+      function (event) {
+        const target = event.target;
+        const [row, column] = this.board.getIndex(target.id);
+        const cell = this.board.cells[row][column];
+        if (this.board.isWallSelected()) {
+          this.board.addWall(cell, row, column);
+          this.board.mouseCheck = !this.board.mouseCheck;
+        } else if (!cell.isWall()) {
+          if (cell.isSelected())
+            this.board.removeCellSelected(cell, row, column);
+          else if (this.board.selectedCells.length < 2)
+            this.board.selectCell(cell, row, column);
+        } else cell.setType("selected");
+      }.bind(this)
+    );
+
+    this.board.area.addEventListener(
+      "mousemove",
+      function (event) {
+        const target = event.target;
+        const [row, column] = this.board.getIndex(target.id);
+        if (this.board.mouseCheck)
+          this.board.cells[row][column].setType("wall");
+      }.bind(this)
+    );
+  }
+
+  handleButtons() {
+    this.wallBtn.addEventListener("click", () => {
+      this.wallBtn.classList.toggle("pressed");
+      this.board.wallSelected = !this.board.wallSelected;
+    });
+
+    this.resetBtn.addEventListener("click", () => {
+      for (let i = 0; i < this.board.rows; i++)
+        for (let j = 0; j < this.board.columns; j++)
+          this.board.cells[i][j].setType("available");
+      this.board.selectedCells = [];
+    });
+
+    this.sizeBtn.addEventListener(
+      "click",
+      function (event) {
+        const size = this.sizeBtn.innerHTML;
+        this.board.deleteBoard();
+
+        if (size == "20x50") {
+          this.sizeBtn.innerHTML = "10x25";
+          this.board.rows = 10;
+          this.board.columns = 25;
+          this.board.square_size = 40;
+        } else if (size == "40x100") {
+          this.sizeBtn.innerHTML = "20x50";
+          this.board.rows = 20;
+          this.board.columns = 50;
+          this.board.square_size = 20;
+        } else {
+          this.sizeBtn.innerHTML = "40x100";
+          this.board.rows = 40;
+          this.board.columns = 100;
+          this.board.square_size = 10;
+        }
+
+        this.board.createBoard();
+      }.bind(this)
+    );
+
+    this.speedBtn.addEventListener("click", () => {
+      const speed = this.speedBtn.innerHTML;
+      if (speed == "Normal") {
+        this.speedBtn.innerHTML = "Fast";
+        this.delayTime = 0.003;
+      }
+      if (speed == "Fast") {
+        this.speedBtn.innerHTML = "Slow";
+        this.delayTime = 0.05;
+      }
+      if (speed == "Slow") {
+        this.speedBtn.innerHTML = "Normal";
+        this.delayTime = 0.01;
+      }
+    });
+
+    this.calculateBtn.addEventListener("click", () => {
+      if (!this.dijkstraIsActive) {
+      this.dijkstraIsActive = true;
+        console.log(this.dijkstraIsActive);
+        const dijkstra = new Dijkstra(
+          this.board.cells,
+          this.board.rows,
+          this.board.columns,
+          this.board.selectedCells[0],
+          this.board.selectedCells[1],
+          this.delayTime
+        );
+        console.log(dijkstra.delayTime);
+        const solution = dijkstra.dijkstra();
+        if (solution) {
+          const { distance, path } = solution;
+          console.log(`Distância mínima: ${solution.distance}`);
+
+          let time = 0;
+
+          setTimeout(() => {
+            for (let i = 1; i < solution.path.length; i++) {
+              const [row, col] = solution.path[i];
+              const div = document.getElementById("div-" + row + "-" + col);
+              this.board.cells[row][col].setType("path");
+              div.style.animationDelay = `${time}s`;
+              div.classList.add("path");
+              div.classList.remove("visited");
+              time += 0.03;
+            }
+            this.dijkstraIsActive = false;
+          }, dijkstra.delay * 1000);
+        } else {
+          console.log("nao encontrou solução");
+        }
+      }
+    });
+  }
+
+  run() {
+    this.board.createBoard();
+    this.handleBoardClick();
+    this.handleButtons();
+  }
+}
+
+let area = new Area();
+area.run();

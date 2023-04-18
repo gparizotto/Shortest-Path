@@ -1,20 +1,21 @@
--mudar canva para quadrado
--mostrar que nao tem solucao
--adicionar mais algoritmos
--arrastar pontos de comeco e fim
+-mudar canva para quadrado (não mais necessário)
+-mostrar que nao tem solucao 
+-adicionar mais algoritmos 
+-arrastar pontos de comeco e fim (não mais necessário)
 -labirinto
--3 tamanhos de tabuleiro
--velocidade
--buga quando muda o tamanho
--nao funciona o algoritmo quando o tamanho muda
--reescrever codigo
--consertar handleclick (separar em handlemouse pq tem q fazer as paredes
-arrastarem, alem de fazer um sobrepor o outro)
+-3 tamanhos de tabuleiro (feito)
+-velocidade (feito)
+-buga quando muda o tamanho (feito)
+-nao funciona o algoritmo quando o tamanho muda (feito)
+-reescrever codigo (feito)
+-consertar handleclick (separar em handlemouse pq tem q fazer as paredes 
+arrastarem, alem de fazer um sobrepor o outro) (feito)
 -pesquisar sobre bind
 -trocar area por element
--separar board em canva/area e espaco normal para buttons 
--implementar dijkstra
--quando ta mto grande ele trava mto -> translate do css
-- apertar calcular varias vezes
--resetBtn nao esta funcionando - reset dentro de board
--clica e desclica wall e ele continua na parede
+-separar board em canva/area e espaco normal para buttons (feito)
+-implementar dijkstra (feito)
+-quando ta mto grande ele trava mto -> translate do css (feito)
+- apertar calcular varias vezes (feito)
+-resetBtn nao esta funcionando - reset dentro de board (feito mas pode pensar de outro jeito)
+-clica e desclica wall e ele continua na parede (feito)
+-mudar adicionar parede e calcular dps de calculado

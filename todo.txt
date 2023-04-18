@@ -8,3 +8,13 @@
 -buga quando muda o tamanho
 -nao funciona o algoritmo quando o tamanho muda
 -reescrever codigo
+-consertar handleclick (separar em handlemouse pq tem q fazer as paredes
+arrastarem, alem de fazer um sobrepor o outro)
+-pesquisar sobre bind
+-trocar area por element
+-separar board em canva/area e espaco normal para buttons 
+-implementar dijkstra
+-quando ta mto grande ele trava mto -> translate do css
+- apertar calcular varias vezes
+-resetBtn nao esta funcionando - reset dentro de board
+-clica e desclica wall e ele continua na parede

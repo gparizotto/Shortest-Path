@@ -220,16 +220,16 @@ header {
 
 @keyframes cellVisited {
   0% {
-    transform: translateY(0);
+    /* transform: translateY(0); */
   }
   50% {
     background-color: rgb(9, 87, 255);
-    transform: translateY(-4px);
-    transform: translateX(-4px);
+    /* transform: translateY(-4px);
+    transform: translateX(-4px); */
   }
   100% {
     background-color: rgb(9, 255, 234);
-    transform: translateY(0);
+    /* transform: translateY(0); */
   }
 }
 
@@ -237,6 +237,7 @@ header {
   animation-name: cellVisited;
   animation-duration: 1s;
   animation-fill-mode: forwards;
+  /* background-color: rgb(9, 255, 234); */
 }
 
 .wall.wallSelected {

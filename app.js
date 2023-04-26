@@ -1,4 +1,5 @@
 import { Dijkstra } from "./shortest.js";
+import { Maze } from "./maze.js";
 
 const WIDTH = 1000;
 const HEIGHT = 400;
@@ -24,7 +25,7 @@ class Cell {
     this.type = type;
     if (type === "wall") {
       this.div.classList.add("wall");
-      this.div.classList.remove("selected");
+      this.div.classList.remove("selected", "path", "visited");
     } else if (type === "available") {
       this.div.classList.remove("wall", "selected", "visited", "path");
     } else if (type === "selected") {
@@ -135,6 +136,19 @@ class Area {
     this.dijkstraIsActive = false;
   }
 
+  clearBoard() {
+    debugger;
+    for (let i = 0; i < this.board.rows; i++)
+      for (let j = 0; j < this.board.columns; j++) {
+        if (
+          this.board.cells[i][j].type == "path" ||
+          this.board.cells[i][j].type == "visited"
+        ) {
+          this.board.cells[i][j].setType("available");
+        }
+      }
+  }
+
   handleBoardClick() {
     this.board.area.addEventListener(
       "click",
@@ -222,9 +236,9 @@ class Area {
     });
 
     this.calculateBtn.addEventListener("click", () => {
-      if (!this.dijkstraIsActive) {
-      this.dijkstraIsActive = true;
-        console.log(this.dijkstraIsActive);
+      if (!this.dijkstraIsActive && this.board.selectedCells.length == 2) {
+        this.dijkstraIsActive = true;
+        this.clearBoard();
         const dijkstra = new Dijkstra(
           this.board.cells,
           this.board.rows,
@@ -233,8 +247,8 @@ class Area {
           this.board.selectedCells[1],
           this.delayTime
         );
-        console.log(dijkstra.delayTime);
         const solution = dijkstra.dijkstra();
+        console.log(solution);
         if (solution) {
           const { distance, path } = solution;
           console.log(`Distância mínima: ${solution.distance}`);
@@ -247,16 +261,33 @@ class Area {
               const div = document.getElementById("div-" + row + "-" + col);
               this.board.cells[row][col].setType("path");
               div.style.animationDelay = `${time}s`;
-              div.classList.add("path");
-              div.classList.remove("visited");
               time += 0.03;
             }
             this.dijkstraIsActive = false;
           }, dijkstra.delay * 1000);
-        } else {
-          console.log("nao encontrou solução");
         }
+      } else {
+        console.log("nao encontrou solução");
       }
+    });
+
+    this.mazeBtn.addEventListener("click", () => {
+      for (let i = 0; i < this.board.rows; i++)
+        for (let j = 0; j < this.board.columns; j++)
+          this.board.cells[i][j].setType("available");
+      this.board.selectedCells = [];
+      let maze = new Maze(
+        this.board.cells,
+        this.board.rows,
+        this.board.columns
+      );
+      maze.generateMaze();
+      for (let i = 0; i < this.board.rows; i++)
+        for (let j = 0; j < this.board.columns; j++) {
+          if (maze.mazeMatrix[i][j] == 0) {
+            this.board.cells[i][j].setType("wall");
+          }
+        }
     });
   }
 

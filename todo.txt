@@ -19,3 +19,11 @@ arrastarem, alem de fazer um sobrepor o outro) (feito)
 -resetBtn nao esta funcionando - reset dentro de board (feito mas pode pensar de outro jeito)
 -clica e desclica wall e ele continua na parede (feito)
 -mudar adicionar parede e calcular dps de calculado
+-mostrar quando tem 2 solucoes ou mais (não mais necessário)
+- verificar se tem 2 selecionados antes de chamar o dijkstra (feito)
+- mudar para setType mudar tbm na div
+- terminar maze
+- fazer funcao para limpar board
+- fazer animacao de maze
+- mostrar quando nao tem solucao
+- deu pra selecionar uma parede do labirinto e nao funcionou dps

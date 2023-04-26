@@ -183,6 +183,10 @@ header {
   animation-fill-mode: forwards; */
 }
 
+.square.available {
+  background-color: white;
+}
+
 .square:hover {
   background-color: rgb(117, 113, 113);
 }
@@ -193,6 +197,26 @@ header {
 
 .square.wall {
   background-color: rgb(37, 31, 31) !important;
+}
+
+@keyframes Maze {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+    transform: translateX(-4px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.square.maze {
+  background-color: rgb(37, 31, 31) !important;
+  animation-name: Maze;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
 }
 
 @keyframes pathFound {
@@ -220,6 +244,7 @@ header {
 
 @keyframes cellVisited {
   0% {
+    background-color: white;
     /* transform: translateY(0); */
   }
   50% {

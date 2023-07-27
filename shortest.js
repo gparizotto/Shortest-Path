@@ -32,6 +32,8 @@ export class Dijkstra {
     this.delay = 0;
     this.delayTime = delayTime;
     this.answer = [];
+    this.path = [];
+    this.distance = 0;
   }
 
   dijkstra() {
@@ -56,15 +58,15 @@ export class Dijkstra {
       this.delay += this.delayTime;
 
       if (current[0] == row && current[1] == column) {
-        const path = [];
-        let distance = this.distances[current[0]][current[1]];
+        this.path = [];
+        this.distance = this.distances[current[0]][current[1]];
         let predecessor = this.predecessors[current];
         while (predecessor) {
-          path.unshift(predecessor);
+          this.path.unshift(predecessor);
           predecessor = this.predecessors[predecessor];
         }
         // this.answer.push({ distance, path });
-        return { distance, path };
+        return { distance: this.distance, path: this.path };
       }
       // Marca o ponto como visitado
       this.visited[current[0]][current[1]] = true;
@@ -90,7 +92,9 @@ export class Dijkstra {
         }
       }
     }
-    return this.answer;
+
+    this.distance = 0;
+    return { distance: this.distance, path: this.path};
   }
 
   getNeighbors(current, cells) {

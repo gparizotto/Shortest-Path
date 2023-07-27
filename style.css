@@ -60,7 +60,7 @@ button {
   justify-content: space-between;
   align-items: center;
   height: 8vh;
-  width: 1000px;;
+  width: 1000px;
 }
 
 .configBtn {
@@ -150,20 +150,11 @@ header {
 #calculate:active {
   background-color: rgb(0, 255, 0);
 }
-*/
-
-/* .wall {
-    position: absolute;
-    top: 30px;
-    left: auto;
-} */
 
 #wall-btn.pressed {
   background-color: rgb(0, 255, 0);
 }
 
-/* quadradinho 20x20 */
-/* 20 linhas por 50 colunas */
 .canva {
   background-color: aliceblue;
   height: 400px;
@@ -177,10 +168,6 @@ header {
   height: 20px;
   width: 20px;
   border: 1px solid black;
-  /* border-radius: 15%;
-  box-shadow: inset -1px   0 0 black, inset 0 -1px 0 black, inset 1px 0 0 black,
-    inset 0 1px 0 black;
-  animation-fill-mode: forwards; */
 }
 
 .square.available {
@@ -201,14 +188,15 @@ header {
 
 @keyframes Maze {
   0% {
-    transform: translateY(0);
+    background-color: white;
+    transform: translate(-50%, -150%);
   }
   50% {
-    transform: translateY(-4px);
-    transform: translateX(-4px);
+    background-color: #23232e;
   }
   100% {
-    transform: translateY(0);
+    background-color: black;
+    transform: translate(0%, 0%);
   }
 }
 
@@ -262,10 +250,32 @@ header {
   animation-name: cellVisited;
   animation-duration: 1s;
   animation-fill-mode: forwards;
-  /* background-color: rgb(9, 255, 234); */
 }
 
 .wall.wallSelected {
   background-color: red !important;
   color: white !important;
+}
+
+.answer {
+  width: 250px;
+  height: 50px;
+  position: relative;
+  bottom: 100px;
+  left:50%;
+  transform: translate(-50%);
+  text-align: center;
+  background-color: #434385; 
+  color: aliceblue;
+  border: 3px solid black;
+  border-radius: 50px;
+  padding: 10px;
+  text-align: center;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-family: "Montsserat", sans-serif; 
+  font-weight: bold;
+  letter-spacing: 1px;
 }

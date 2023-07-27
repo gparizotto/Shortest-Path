@@ -2,7 +2,7 @@
 -mostrar que nao tem solucao 
 -adicionar mais algoritmos 
 -arrastar pontos de comeco e fim (não mais necessário)
--labirinto
+-labirinto (feito)
 -3 tamanhos de tabuleiro (feito)
 -velocidade (feito)
 -buga quando muda o tamanho (feito)
@@ -21,9 +21,10 @@ arrastarem, alem de fazer um sobrepor o outro) (feito)
 -mudar adicionar parede e calcular dps de calculado
 -mostrar quando tem 2 solucoes ou mais (não mais necessário)
 - verificar se tem 2 selecionados antes de chamar o dijkstra (feito)
-- mudar para setType mudar tbm na div
-- terminar maze
-- fazer funcao para limpar board
-- fazer animacao de maze
+- mudar para setType mudar tbm na div (feito)
+- terminar maze (feito)
+- fazer funcao para limpar board (feito)
+- fazer animacao de maze (feito)
 - mostrar quando nao tem solucao
-- deu pra selecionar uma parede do labirinto e nao funcionou dps
+- deu pra selecionar uma parede do labirinto e nao funcionou dps (feito)
+- pensar em algo para animar o wall (feito)

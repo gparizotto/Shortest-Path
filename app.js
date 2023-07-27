@@ -27,16 +27,19 @@ class Cell {
       this.div.classList.add("wall");
       this.div.classList.remove("selected", "path", "visited");
     } else if (type === "available") {
-      this.div.classList.remove("wall", "selected", "visited", "path");
+      this.div.classList.remove("wall", "selected", "visited", "path", "maze");
     } else if (type === "selected") {
       this.div.classList.add("selected");
-      this.div.classList.remove("wall", "visited", "path");
+      this.div.classList.remove("wall", "visited", "path", "maze");
     } else if (type === "visited") {
       this.div.classList.add("visited");
-      this.div.classList.remove("wall", "selected", "path");
+      this.div.classList.remove("wall", "selected", "path", "maze");
     } else if (type === "path") {
       this.div.classList.add("path");
-      this.div.classList.remove("wall", "visited", "selected");
+      this.div.classList.remove("wall", "visited", "selected", "maze");
+    } else if (type === "maze") {
+      this.div.classList.add("maze");
+      this.div.classList.remove("visited", "selected", "path");
     }
   }
 
@@ -137,7 +140,6 @@ class Area {
   }
 
   clearBoard() {
-    debugger;
     for (let i = 0; i < this.board.rows; i++)
       for (let j = 0; j < this.board.columns; j++) {
         if (
@@ -164,7 +166,7 @@ class Area {
             this.board.removeCellSelected(cell, row, column);
           else if (this.board.selectedCells.length < 2)
             this.board.selectCell(cell, row, column);
-        } else cell.setType("selected");
+        } else this.board.selectCell(cell, row, column);
       }.bind(this)
     );
 
@@ -190,6 +192,9 @@ class Area {
         for (let j = 0; j < this.board.columns; j++)
           this.board.cells[i][j].setType("available");
       this.board.selectedCells = [];
+
+      let div = document.getElementById("ans-div");
+      if(div) document.body.removeChild(div);
     });
 
     this.sizeBtn.addEventListener(
@@ -247,17 +252,21 @@ class Area {
           this.board.selectedCells[1],
           this.delayTime
         );
-        const solution = dijkstra.dijkstra();
-        console.log(solution);
-        if (solution) {
-          const { distance, path } = solution;
-          console.log(`Distância mínima: ${solution.distance}`);
 
+        let ans = document.createElement("div");
+        ans.className = "answer";
+        ans.id = "ans-div";
+        document.body.appendChild(ans);
+
+        const { distance, path } = dijkstra.dijkstra();
+
+        if (distance > 0) { 
+          ans.textContent = `Minimum distance between the cells: ${distance} cells`;
           let time = 0;
 
           setTimeout(() => {
-            for (let i = 1; i < solution.path.length; i++) {
-              const [row, col] = solution.path[i];
+            for (let i = 1; i < path.length; i++) {
+              const [row, col] = path[i];
               const div = document.getElementById("div-" + row + "-" + col);
               this.board.cells[row][col].setType("path");
               div.style.animationDelay = `${time}s`;
@@ -265,16 +274,13 @@ class Area {
             }
             this.dijkstraIsActive = false;
           }, dijkstra.delay * 1000);
+        } else {
+          ans.textContent = "There is no path between the cells";
         }
-      } else {
-        console.log("nao encontrou solução");
       }
     });
 
     this.mazeBtn.addEventListener("click", () => {
-      for (let i = 0; i < this.board.rows; i++)
-        for (let j = 0; j < this.board.columns; j++)
-          this.board.cells[i][j].setType("available");
       this.board.selectedCells = [];
       let maze = new Maze(
         this.board.cells,
@@ -282,12 +288,6 @@ class Area {
         this.board.columns
       );
       maze.generateMaze();
-      for (let i = 0; i < this.board.rows; i++)
-        for (let j = 0; j < this.board.columns; j++) {
-          if (maze.mazeMatrix[i][j] == 0) {
-            this.board.cells[i][j].setType("wall");
-          }
-        }
     });
   }
 

@@ -75,16 +75,13 @@ export class Maze {
   }
 
   drawMaze() {
-    const delayTime = 1;
-    let delay = 0;
+    for (let i = 0; i < this.rows; i++)
+      for (let j = 0; j < this.columns; j++)
+        this.cells[i][j].setType("available");
 
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.columns; j++) {
-        setTimeout(() => {
-          if (this.mazeMatrix[i][j] == 0) {
-            this.cells[i][j].setType("wall");
-          }
-        }, delayTime * 1000);
+        if (this.mazeMatrix[i][j] == 0) this.cells[i][j].setType("wall");
       }
     }
   }

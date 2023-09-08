@@ -49,7 +49,7 @@ Finding the minimum path but in a larger grid.
 
 ### Implementing Maze
 Finding the minimum and only path in a maze between two squares.
-![maze demo gif](./assets/40x100wall.gif)
+![maze demo gif](./assets/40x100maze.gif)
 
 ### No Solution
 Demo when there's no path between the cells.
